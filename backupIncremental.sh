@@ -51,6 +51,10 @@ echo Checking dropbox...
 /usr/local/bin/dropbox status
 echo
 
+# Shutdown Minecraft
+echo "Shutting down minecraft..."
+/etc/init.d/minecraft stop
+
 # Backing up OS related files
 echo -n "Backing up OS related files..."
 
@@ -149,6 +153,10 @@ date >> $BACKUP_DIR/$DATES/log/backup_$DATES.log
 echo Checking dropbox status...
 /usr/local/bin/dropbox status
 echo
+
+# Shutdown Minecraft
+echo "Restarting minecraft..."
+/etc/init.d/minecraft start
 
 # Finishing backup
 

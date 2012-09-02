@@ -69,6 +69,10 @@ echo Checking dropbox...
 /usr/local/bin/dropbox status
 echo
 
+# Shutdown Minecraft
+echo "Shutting down minecraft..."
+/etc/init.d/minecraft stop
+
 # Backing up OS related files
 echo -n "Backing up OS related files..."
 
@@ -147,6 +151,21 @@ echo "done."
 #done
 #echo "done."
 
+# Backing up minecraft
+# ensure the backup location is properly specifiy n the init script
+BACKUPMODULE=minecraft.backup
+echo -n "Backing up minecraft..."
+/etc/init.d/minecraft backup >> $BACKUP_DIR/log/backup_$DATES.log
+rcCheck $?
+echo -n "Deleting old minecraft backups..."
+echo "Deleting old minecraft backups..." >> $BACKUP_DIR/log/backup_$DATES.log
+find  /mnt/storage/backups/minecraft.backup -maxdepth 1 -type f -ctime +2 >> $BACKUP_DIR/log/backup_$DATES.log
+find  /mnt/storage/backups/minecraft.backup -maxdepth 1 -type d -ctime +2 >> $BACKUP_DIR/log/backup_$DATES.log
+#find /mnt/storage/backups/minecraft.backup  -maxdepth 1 -type f -ctime +28 -exec rm -rf {} \; >> $BACKUP_DIR/log/backup_$DATES.log
+#find /mnt/storage/backups/minecraft.backup  -maxdepth 1 -type d -ctime +28 -exec rm -rf {} \; >> $BACKUP_DIR/log/backup_$DATES.log
+echo "done." >> $BACKUP_DIR/log/backup_$DATES.log
+
+
 date > $BACKUP_DIR/last.backup
 date >> $BACKUP_DIR/log/backup_$DATES.log
 
@@ -168,6 +187,10 @@ find $BACKUP_DIR -ctime +14 -exec rm -rf {} \;
 echo Checking dropbox...
 /usr/local/bin/dropbox status
 echo
+
+# Restarting Minecraft
+echo "Restarting down minecraft..."
+/etc/init.d/minecraft start
 
 # Finishing backup
 
