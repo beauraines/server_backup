@@ -14,6 +14,16 @@ rcCheck()
  {
 if [ $1 -ne 0 ]
 then
+then
+  if [ $1 -eq 24 ]
+  then
+  # Supressing any error messaging
+  # Exit code 24 is not really an error: Partial transfer due to vanished source files
+  # This means that a file was there to be backed up when it started, but when it got to that file
+  # The file was gone and not able to be backed up.
+  # This frequently happens with temporary and lock files
+  return
+  fi
 echo 
 echo "***ERROR***" >> $BACKUP_DIR/log/backup_$DATES.log
 echo "`date` An error occurred while backing up $BACKUPMODULE.  Error code $1 was returned." >> $BACKUP_DIR/log/backup_$DATES.log
