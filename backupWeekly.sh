@@ -14,7 +14,6 @@ rcCheck()
  {
 if [ $1 -ne 0 ]
 then
-then
   if [ $1 -eq 24 ]
   then
   # Supressing any error messaging
