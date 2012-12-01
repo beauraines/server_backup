@@ -215,7 +215,7 @@ echo Creating S3 backup directory
 
 #copy mysql dumps to S3
 echo -n Copying mysql dumps to S3...
-/usr/local/bin/s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
+/usr/local/bin/s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 # find 1028120430/ -maxdepth 1 -type d ! -name mysql ! -name $DATES
