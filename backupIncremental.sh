@@ -34,6 +34,14 @@ fi
 
  }
 
+checkDropbox()
+{
+#Checking dropbox status
+echo Checking dropbox...
+/usr/local/bin/dropbox status
+echo
+}
+
 # Check for and create if needed certain directories
 if [ ! -d $BACKUP_DIR/$DATES/log ]
 then
@@ -55,10 +63,7 @@ echo "Writing output to $BACKUP_DIR/$DATES/log/backup_$DATES.log"
 echo "Incremental Backup job starting" > $BACKUP_DIR/$DATES/log/backup_$DATES.log
 echo "Writing output to $BACKUP_DIR/$DATES/log/backup_$DATES.log" > $BACKUP_DIR/$DATES/log/backup_$DATES.log
 
-#Checking dropbox status
-echo Checking dropbox...
-/usr/local/bin/dropbox status
-echo
+checkDropbox
 
 # Shutdown Minecraft
 echo "Shutting down minecraft..."
@@ -158,10 +163,7 @@ date >> $BACKUP_DIR/$DATES/log/backup_$DATES.log
 #rcCheck $?
 #echo "done."
 
-#Checking dropbox status
-echo Checking dropbox status...
-/usr/local/bin/dropbox status
-echo
+checkDropbox
 
 # Shutdown Minecraft
 echo "Restarting minecraft..."
