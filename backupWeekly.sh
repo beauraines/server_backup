@@ -93,7 +93,7 @@ echo -n "Backing up OS related files..."
 
 BACKUPMODULE='/var/spool/cron/crontabs'
 echo ".....Backing up crontabs" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --copy-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='/opt'
@@ -188,7 +188,7 @@ date >> $BACKUP_DIR/log/backup_$DATES.log
 # Removing old backup files
 #find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -delete
 #find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -exec rm -rf {} \;
-find $BACKUP_DIR -ctime +14 -exec rm -rf {} \;
+find $BACKUP_DIR/.. -ctime +14 -exec rm -rf {} \;
 
 
 # Sending backup files to remote backup host
