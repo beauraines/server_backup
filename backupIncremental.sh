@@ -76,6 +76,8 @@ echo "done."
 
 # Backing up mysql databases
 # Modified from comments on http://dev.mysql.com/doc/refman/5.1/en/mysqlhotcopy.html
+if [ $backupMySQL -eq 1 ]
+then
 echo -n "Backing up mysql databases..."
 echo "Backing up  mysql databases..."  >> $BACKUP_DIR/log/backup_$DATES.log
 for i in `find /var/lib/mysql/* -type d -printf "%f\n"`
@@ -87,6 +89,7 @@ do
 	sleep 10
 done
 
+
 	i=information_schema
 	BACKUPMODULE="mysql database schema $i"
         echo "Backing up $BACKUPMODULE"
@@ -94,32 +97,41 @@ done
 	rcCheck $?
 	sleep 10
 echo "done."
+fi
 
 # Backing up websites
+if [ $backupWWW -eq 1 ]
+then
 echo -n "Backing up websites in $WWWDIR..."
 BACKUPMODULE="Backing up website in $WWWDIR"
 echo "Backing up websites..."  >> $BACKUP_DIR/log/backup_$DATES.log
 rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_www --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP/ $WWWDIR $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
+fi
+
 
 #Backing up subversion repositories
-#echo -n "Backing up subversion repositores in $REPODIR ..."
-#echo "Backing up subversion repositories..."  >> $BACKUP_DIR/log/backup_$DATES.log
-#for x in `find $REPODIR/* -maxdepth 0 -type d -printf "%f\n"`
-#do
-#	BACKUPMODULE=$REPODIR/$x
-#	svn-backup-dumps  -z $REPODIR/$x $BACKUP_DIR/repos/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
-#	rcCheck $?
-#	find $BACKUP_DIR/repos/ -not -type d -name $x\* -not -name `(pushd $BACKUP_DIR/repos/ > /dev/null && ls -tr1 $x* | tail -n1 && popd > /dev/null)`  -delete
-#done
-#echo "done."
+if [ $backupSVN -eq 1 ]
+then
+echo -n "Backing up subversion repositores in $REPODIR ..."
+echo "Backing up subversion repositories..."  >> $BACKUP_DIR/log/backup_$DATES.log
+for x in `find $REPODIR/* -maxdepth 0 -type d -printf "%f\n"`
+do
+	BACKUPMODULE=$REPODIR/$x
+	svn-backup-dumps  -z $REPODIR/$x $BACKUP_DIR/repos/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+	rcCheck $?
+	find $BACKUP_DIR/repos/ -not -type d -name $x\* -not -name `(pushd $BACKUP_DIR/repos/ > /dev/null && ls -tr1 $x* | tail -n1 && popd > /dev/null)`  -delete
+done
+echo "done."
+fi
+
 
 date > $BACKUP_DIR/last.backup
 date >> $BACKUP_DIR/log/backup_$DATES.log
 
 
-#copyBackupstoRemoteServer
+copyBackupstoRemoteServer
 
 checkDropbox
 

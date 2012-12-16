@@ -21,25 +21,31 @@ echo "`date` An error occurred while backing up $BACKUPMODULE.  Error code $1 wa
 echo "`date` An error occurred while backing up $BACKUPMODULE.  Error code $1 was returned." | mutt -s "Error occurred during backup." -- $BACKUPNOTIFY
 echo "***ERROR***"
 fi
+}
 
 copyBackupstoRemoteServer()
 {
+if [ $CopyBackupsRemote -eq 1 ]
+then
 # Sending backup files to remote backup host
 BACKUPMODULE="Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR"
 echo -n "Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR..."
 rsync -Hpavxhr --delete $BACKUP_DIR $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
+fi
 }
 
- }
 
 checkDropbox()
 {
+if [ $UseDropbox -eq 1 ]
+then
 #Checking dropbox status
 echo Checking dropbox...
 /usr/local/bin/dropbox status
 echo
+fi
 }
 
 deleteOldBackups()
@@ -52,6 +58,8 @@ find $BACKUP_DIR/.. -ctime +14 -exec rm -rf {} \;
 
 copyBackupstoS3()
 {
+if [ $CopyBackupsS3 -eq 1 ]
+then
 # Copy backups to S3
 echo Copying backups to S3
 # Create dated for directory on S3
@@ -92,4 +100,5 @@ echo done.
 echo -n Cleaning up...
 rm /tmp/*$DATES.tgz
 echo done.
+fi
 }
