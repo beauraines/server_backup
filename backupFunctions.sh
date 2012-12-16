@@ -64,12 +64,12 @@ then
 echo Copying backups to S3
 # Create dated for directory on S3
 echo Creating S3 backup directory
-/usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 #copy mysql dumps to S3
 echo -n Copying mysql dumps to S3...
-/usr/local/bin/s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 # find 1028120430/ -maxdepth 1 -type d ! -name mysql ! -name $DATES
@@ -83,17 +83,17 @@ tar -czf /tmp/www.$DATES.tgz $BACKUP_DIR/www
 echo done.
 
 echo -n Copying tar files to S3...
-/usr/local/bin/s3cmd -c $S3CFGFILE put /tmp/*.$DATES.tgz s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE put /tmp/*.$DATES.tgz s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 #copy Package list file to S3
 echo -n Copying package list to S3...
-/usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE put $BACKUP_DIR/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 #copy log file to S3
 echo -n Copying log file to S3...
-/usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR/log/backup_$DATES.log s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE put $BACKUP_DIR/log/backup_$DATES.log s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 #Clean up after backups - but the problem is there isn't a good way to check for successful upload. 
