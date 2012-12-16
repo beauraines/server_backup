@@ -34,8 +34,11 @@ echo "Writing output to $BACKUP_DIR/log/backup_$DATES.log" > $BACKUP_DIR/log/bac
 checkDropbox
 
 # Shutdown Minecraft
+if [ $MinecraftInstalled -eq 1 ]
+then
 echo "Shutting down minecraft..."
 /etc/init.d/minecraft stop
+fi
 
 # Backing up OS related files
 echo -n "Backing up OS related files..."
@@ -136,8 +139,11 @@ copyBackupstoRemoteServer
 checkDropbox
 
 # Restarting Minecraft
+if [ $MinecraftInstalled -eq 1 ]
+then
 echo "Restarting down minecraft..."
 /etc/init.d/minecraft start
+fi
 
 # Finishing backup
 
