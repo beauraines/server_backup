@@ -42,22 +42,22 @@ echo -n "Backing up OS related files..."
 
 BACKUPMODULE='/var/spool/cron/crontabs'
 echo ".....Backing up crontabs" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='/opt'
 echo ".....Backing up /opt" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='/etc'
 echo ".....Backing up /etc" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='/usr'
 echo ".....Backing up /usr" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='package list'
@@ -70,7 +70,7 @@ echo "done."
 BACKUPMODULE='user data'
 echo -n "Backing up user data..." 
 echo  "Backing up user data..."  >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP/ /home $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP/ /home $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
 
@@ -99,7 +99,7 @@ echo "done."
 echo -n "Backing up websites in $WWWDIR..."
 BACKUPMODULE="Backing up website in $WWWDIR"
 echo "Backing up websites..."  >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_www --compare-dest=$BACKUP_DIR/$LASTFULLBACKUP/ $WWWDIR $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_www --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP/ $WWWDIR $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
 
