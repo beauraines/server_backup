@@ -114,6 +114,7 @@ echo "done."
 
 # Backing up websites
 echo -n "Backing up websites in $WWWDIR..."
+BACKUPMODULE="Backing up website in $WWWDIR"
 echo "Backing up websites..."  >> $BACKUP_DIR/log/backup_$DATES.log
 rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_www --copy-dest=$LASTBACKUP/www  $WWWDIR $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
