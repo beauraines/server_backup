@@ -60,7 +60,7 @@ rcCheck $?
 
 BACKUPMODULE='/usr'
 echo ".....Backing up /usr" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_usr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='package list'

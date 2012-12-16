@@ -77,7 +77,7 @@ rcCheck $?
 
 BACKUPMODULE='/usr'
 echo ".....Backing up /usr" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --copy-dest=$LASTBACKUP/usr  /usr $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_usr --copy-dest=$LASTBACKUP/usr  /usr $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='package list'
