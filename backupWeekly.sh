@@ -153,13 +153,7 @@ date >> $BACKUP_DIR/log/backup_$DATES.log
 
 deleteOldBackups
 
-
-# Sending backup files to remote backup host
-#BACKUPMODULE="Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR"
-#echo -n "Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR..."
-#rsync -Hpavxhr --delete $BACKUP_DIR/datedbackups/ $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
-#rcCheck $?
-#echo "done."
+#copyBackupstoRemoteServer
 
 checkDropbox
 

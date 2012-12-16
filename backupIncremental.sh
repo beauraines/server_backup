@@ -109,9 +109,9 @@ echo "done."
 #for x in `find $REPODIR/* -maxdepth 0 -type d -printf "%f\n"`
 #do
 #	BACKUPMODULE=$REPODIR/$x
-#	svn-backup-dumps  -z $REPODIR/$x $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+#	svn-backup-dumps  -z $REPODIR/$x $BACKUP_DIR/repos/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 #	rcCheck $?
-	#find $BACKUP_DIR/repos/ -not -type d -name $x\* -not -name `(pushd $BACKUP_DIR/repos/ > /dev/null && ls -tr1 $x* | tail -n1 && popd > /dev/null)`  -delete
+#	find $BACKUP_DIR/repos/ -not -type d -name $x\* -not -name `(pushd $BACKUP_DIR/repos/ > /dev/null && ls -tr1 $x* | tail -n1 && popd > /dev/null)`  -delete
 #done
 #echo "done."
 
@@ -119,14 +119,7 @@ date > $BACKUP_DIR/last.backup
 date >> $BACKUP_DIR/log/backup_$DATES.log
 
 
-
-
-# Sending backup files to remote backup host
-#BACKUPMODULE="Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR"
-#echo -n "Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR..."
-#rsync -Hpavxhr --delete $BACKUP_DIR/datedbackups/ $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
-#rcCheck $?
-#echo "done."
+#copyBackupstoRemoteServer
 
 checkDropbox
 

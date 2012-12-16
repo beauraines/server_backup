@@ -22,6 +22,15 @@ echo "`date` An error occurred while backing up $BACKUPMODULE.  Error code $1 wa
 echo "***ERROR***"
 fi
 
+copyBackupstoRemoteServer()
+{
+# Sending backup files to remote backup host
+BACKUPMODULE="Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR"
+echo -n "Using rsync to send files to $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR..."
+rsync -Hpavxhr --delete $BACKUP_DIR $REMOTEBACKUPHOST:$REMOTEBACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rcCheck $?
+echo "done."
+}
 
  }
 
