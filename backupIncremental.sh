@@ -8,7 +8,6 @@
 DATES=`date +%m%d%y%H%M` # make handy date string for log filenames
 BACKUP_DIR=$BACKUP_DIR/$DATES
 
-
 #### Functions
 
 rcCheck()
@@ -43,6 +42,7 @@ echo Checking dropbox...
 /usr/local/bin/dropbox status
 echo
 }
+
 
 # Check for and create if needed certain directories
 if [ ! -d $BACKUP_DIR/log ]
@@ -152,10 +152,7 @@ echo "done."
 date > $BACKUP_DIR/last.backup
 date >> $BACKUP_DIR/log/backup_$DATES.log
 
-# Removing old backup files
-#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -delete
-#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -exec rm -rf {} \;
-#find $BACKUP_DIR/log -ctime +7 -delete
+
 
 
 # Sending backup files to remote backup host
@@ -167,8 +164,8 @@ date >> $BACKUP_DIR/log/backup_$DATES.log
 
 checkDropbox
 
-# Shutdown Minecraft
-echo "Restarting minecraft..."
+# Restarting Minecraft
+echo "Restarting down minecraft..."
 /etc/init.d/minecraft start
 
 # Finishing backup
@@ -180,7 +177,7 @@ echo "Backup job completed at `date`" >> $BACKUP_DIR/log/backup_$DATES.log
 # Copy backups to S3
 echo Copying backups to S3
 # Create dated for directory on S3
-echo -n Creating dated backup directory on S3
+echo Creating S3 backup directory
 /usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
@@ -190,7 +187,7 @@ echo -n Copying mysql dumps to S3...
 echo done.
 
 # find 1028120430/ -maxdepth 1 -type d ! -name mysql ! -name $DATES
-echo -n Create tar files of backup directories...
+echo -n Creating tar files of backuped up directories...
 tar -czf /tmp/home.$DATES.tgz $BACKUP_DIR/home
 tar -czf /tmp/usr.$DATES.tgz $BACKUP_DIR/usr
 tar -czf /tmp/etc.$DATES.tgz $BACKUP_DIR/etc

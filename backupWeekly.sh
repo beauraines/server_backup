@@ -1,5 +1,5 @@
 #! /bin/bash
-# set -x
+#set -x
 
 #### Configuration
 
@@ -43,6 +43,13 @@ echo Checking dropbox...
 echo
 }
 
+deleteOldBackups()
+{
+# Removing old backup files
+#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -delete
+#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -exec rm -rf {} \;
+find $BACKUP_DIR/.. -ctime +14 -exec rm -rf {} \;
+}
 
 # Check for and create if needed certain directories
 if [ ! -d $BACKUP_DIR/pkg ]
@@ -137,14 +144,13 @@ do
 	rcCheck $?
 	sleep 10
 done
-	
-        i=information_schema
+
+	i=information_schema
 	BACKUPMODULE="mysql database schema $i"
         echo "Backing up $BACKUPMODULE"
 	mysqldump -R --add-drop-table -v --opt --lock-all-tables --log-error=$BACKUP_DIR/log/backup_$DATES.log -u $MYSQLROOTUSER -p$MYSQLROOTPASS $i | gzip > $BACKUP_DIR/mysql/$i.dmp.sql.gz
 	rcCheck $?
 	sleep 10
-
 echo "done."
 
 # Backing up websites
@@ -185,10 +191,7 @@ date > $BACKUP_DIR/last.backup
 date >> $BACKUP_DIR/log/backup_$DATES.log
 
 
-# Removing old backup files
-#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -delete
-#find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -exec rm -rf {} \;
-find $BACKUP_DIR/.. -ctime +14 -exec rm -rf {} \;
+deleteOldBackups
 
 
 # Sending backup files to remote backup host
@@ -215,6 +218,7 @@ echo Copying backups to S3
 # Create dated for directory on S3
 echo Creating S3 backup directory
 /usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
+echo done.
 
 #copy mysql dumps to S3
 echo -n Copying mysql dumps to S3...
@@ -236,7 +240,7 @@ echo -n Copying tar files to S3...
 echo done.
 
 #copy Package list file to S3
-echo -n Copying package list file to S3...
+echo -n Copying package list to S3...
 /usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
@@ -245,8 +249,8 @@ echo -n Copying log file to S3...
 /usr/local/bin/s3cmd -c $S3CFGFILE put $BACKUP_DIR/log/backup_$DATES.log s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
-#Clean up after backups - but the problem is there isn't a good way to check forsuccesful upload
-echo -n Cleaning up tmp files...
+#Clean up after backups - but the problem is there isn't a good way to check for successful upload. 
+echo -n Cleaning up...
 rm /tmp/*$DATES.tgz
 echo done.
 
