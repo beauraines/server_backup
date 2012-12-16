@@ -35,6 +35,15 @@ fi
 
  }
 
+checkDropbox()
+{
+#Checking dropbox status
+echo Checking dropbox...
+/usr/local/bin/dropbox status
+echo
+}
+
+
 # Check for and create if needed certain directories
 if [ ! -d $BACKUP_DIR/pkg ]
 then
@@ -73,10 +82,7 @@ echo "Backup job starting at `date`."
 echo "Writing output to $BACKUP_DIR/log/backup_$DATES.log"
 echo "Backup job starting" > $BACKUP_DIR/log/backup_$DATES.log
 
-#Checking dropbox status
-echo Checking dropbox...
-/usr/local/bin/dropbox status
-echo
+checkDropbox
 
 # Shutdown Minecraft
 echo "Shutting down minecraft..."
@@ -192,10 +198,7 @@ find $BACKUP_DIR -ctime +14 -exec rm -rf {} \;
 #rcCheck $?
 #echo "done."
 
-#Checking dropbox status
-echo Checking dropbox...
-/usr/local/bin/dropbox status
-echo
+checkDropbox
 
 # Restarting Minecraft
 echo "Restarting down minecraft..."
