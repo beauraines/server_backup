@@ -62,7 +62,7 @@ echo -n "Backing up OS related files..."
 
 BACKUPMODULE='/var/spool/cron/crontabs'
 echo ".....Backing up crontabs" >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --copy-dest=$BACKUP_DIR/$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --copy-dest=$BACKUP_DIR/../$LASTFULLBACKUP $BACKUPMODULE $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 
 BACKUPMODULE='/opt'
@@ -90,7 +90,7 @@ echo "done."
 BACKUPMODULE='user data'
 echo -n "Backing up user data..." 
 echo  "Backing up user data..."  >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --copy-dest=$LASTBACKUP/home /home $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_home --copy-dest=$LASTBACKUP/home /home $BACKUP_DIR/ >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
 

@@ -73,7 +73,7 @@ echo "done."
 BACKUPMODULE='user data'
 echo -n "Backing up user data..." 
 echo  "Backing up user data..."  >> $BACKUP_DIR/log/backup_$DATES.log
-rsync -Hpavxhr --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP/ /home $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
+rsync -Hpavxhr --exclude-from=/usr/local/bin/backupExcludes_home --compare-dest=$BACKUP_DIR/../$LASTFULLBACKUP/ /home $BACKUP_DIR >> $BACKUP_DIR/log/backup_$DATES.log 2>&1
 rcCheck $?
 echo "done."
 
