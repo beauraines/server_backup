@@ -106,8 +106,9 @@ for tarfile in `ls /tmp/*.$DATES.tgz`
 do
 echo -n Uploading $tarfile ...
 $s3cmd -c $S3CFGFILE put $tarfile s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
-echo done.
 s3exitCheck $? $tarfile
+echo done.
+done
 echo Finished uploading tarballs.
 
 #copy Package list file to S3
