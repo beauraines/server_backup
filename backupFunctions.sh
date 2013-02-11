@@ -23,6 +23,24 @@ echo "***ERROR***"
 fi
 }
 
+s3exitCheck()
+{
+exitcode=$1
+file=$2
+
+if [ $1 - ne 0 ]
+then
+  echo 
+  echo "***ERROR***" >> $BACKUP_DIR/log/backup_$DATES.log
+  echo "`date` An error occurred while uploading $file.  Error code $1 was returned." >> $BACKUP_DIR/log/backup_$DATES.log
+  echo "***ERROR***"
+  echo "`date` An error occurred while uploading $file.  Error code $1 was returned."
+  echo "`date` An error occurred while uploading $file.  Error code $1 was returned." | mutt -s "Error occurred during backup." -- $BACKUPNOTIFY
+  echo "***ERROR***"
+fi
+
+}
+
 copyBackupstoRemoteServer()
 {
 if [ $CopyBackupsRemote -eq 1 ]
@@ -70,6 +88,7 @@ echo done.
 #copy mysql dumps to S3
 echo -n Copying mysql dumps to S3...
 $s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+s3exitCheck $?  $BACKUP_DIR/mysql/
 echo done.
 
 # find 1028120430/ -maxdepth 1 -type d ! -name mysql ! -name $DATES
@@ -82,18 +101,25 @@ tar -czf /tmp/opt.$DATES.tgz $BACKUP_DIR/opt
 tar -czf /tmp/www.$DATES.tgz $BACKUP_DIR/www
 echo done.
 
-echo -n Copying tar files to S3...
-$s3cmd -c $S3CFGFILE put /tmp/*.$DATES.tgz s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+echo Copying tarballs  to S3...
+for tarfile in `ls /tmp/*.$DATES.tgz`
+do
+echo -n Uploading $tarfile ...
+$s3cmd -c $S3CFGFILE put $tarfile s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 echo done.
+s3exitCheck $? $tarfile
+echo Finished uploading tarballs.
 
 #copy Package list file to S3
 echo -n Copying package list to S3...
 $s3cmd -c $S3CFGFILE put $BACKUP_DIR/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+s3exitCheck $? $BACKUP_DIR/packagelist
 echo done.
 
 #copy log file to S3
 echo -n Copying log file to S3...
 $s3cmd -c $S3CFGFILE put $BACKUP_DIR/log/backup_$DATES.log s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+s3exitCheck $? $BACKUP_DIR/log/backup_$DATES.log
 echo done.
 
 #Clean up after backups - but the problem is there isn't a good way to check for successful upload. 
