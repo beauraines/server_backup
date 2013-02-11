@@ -28,7 +28,7 @@ s3exitCheck()
 exitcode=$1
 file=$2
 
-if [ $exitcode - ne 0 ]
+if [ $exitcode -ne 0 ]
 then
   echo 
   echo "***ERROR***" >> $BACKUP_DIR/log/backup_$DATES.log
