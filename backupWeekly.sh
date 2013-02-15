@@ -8,7 +8,7 @@
 DATES=`date +%m%d%y` # make handy date string for log filenames
 BACKUP_DIR=$BACKUP_DIR/$DATES
 
-. backupFunctions.sh
+. /usr/local/bin/backupFunctions.sh
 
 # Check for and create if needed certain directories
 if [ ! -d $BACKUP_DIR/pkg ]
