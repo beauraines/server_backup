@@ -99,6 +99,7 @@ tar -czf /tmp/etc.$DATES.tgz $BACKUP_DIR/etc
 tar -czf /tmp/crontabs.$DATES.tgz $BACKUP_DIR/crontabs
 tar -czf /tmp/opt.$DATES.tgz $BACKUP_DIR/opt
 tar -czf /tmp/www.$DATES.tgz $BACKUP_DIR/www
+tar -czf /tmp/repos.$DATES.tgz $BACKUP_DIR/repos
 echo done.
 
 echo Copying tarballs  to S3...

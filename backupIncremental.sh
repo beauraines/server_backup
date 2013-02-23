@@ -119,6 +119,10 @@ if [ $backupSVN -eq 1 ]
 then
 echo -n "Backing up subversion repositores in $REPODIR ..."
 echo "Backing up subversion repositories..."  >> $BACKUP_DIR/log/backup_$DATES.log
+if [ ! -d $BACKUP_DIR/repos ]
+then
+        mkdir -p $BACKUP_DIR/repos
+fi
 for x in `find $REPODIR/* -maxdepth 0 -type d -printf "%f\n"`
 do
 	BACKUPMODULE=$REPODIR/$x
