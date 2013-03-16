@@ -27,16 +27,29 @@ s3exitCheck()
 {
 exitcode=$1
 file=$2
+retrycount=0
 
 if [ $exitcode -ne 0 ]
 then
   echo 
   echo "***ERROR***" >> $BACKUP_DIR/log/backup_$DATES.log
-  echo "`date` An error occurred while uploading $file.  Error code $1 was returned." >> $BACKUP_DIR/log/backup_$DATES.log
+  echo "`date` An error occurred while uploading $file.  Error code $1 was returned. Attempting to retry" >> $BACKUP_DIR/log/backup_$DATES.log
   echo "***ERROR***"
-  echo "`date` An error occurred while uploading $file.  Error code $1 was returned."
-  echo "`date` An error occurred while uploading $file.  Error code $1 was returned." | mutt -s "Error occurred during backup." -- $BACKUPNOTIFY
+  echo "`date` An error occurred while uploading $file.  Error code $1 was returned. Attempting to retry"
   echo "***ERROR***"
+  sleep 60
+  $s3cmd -c $S3CFGFILE put $file s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+  exitcode=$?
+  if [ $exitcode -ne 0 ]
+    then
+     echo "Retry was not successful. You must manually upload the file with the command \n  $s3cmd -c $S3CFGFILE put $file s3://$S3BUCKETNAME/`hostname`/$DATES/"
+     echo "Retry was not successful. You must manually upload the file with the command \n  $s3cmd -c $S3CFGFILE put $file s3://$S3BUCKETNAME/`hostname`/$DATES/" >> $BACKUP_DIR/log/backup_$DATES.log
+     echo "`date` An error occurred while uploading $file.  Error code $exitcode was returned. Second attempt to upload the file was not successful. You must manually upload the file with the command \n  $s3cmd -c $S3CFGFILE put $file s3://$S3BUCKETNAME/`hostname`/$DATES/" | mutt -s "Error occurred during backup." -- $BACKUPNOTIFY
+    else
+     echo Retry was successful. 
+     echo Retry was successful. >> $BACKUP_DIR/log/backup_$DATES.log
+     echo "`date` An error occurred while uploading $file.  Error code $exitcode was returned. Second attempt to upload the file was successful. No action is necessary" | mutt -s "INFO Upload failed but successfully retried" -- $BACKUPNOTIFY
+  fi
 fi
 
 }
