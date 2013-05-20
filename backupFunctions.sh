@@ -37,7 +37,7 @@ then
   echo "***ERROR***"
   echo "`date` An error occurred while uploading $file.  Error code $1 was returned. Attempting to retry"
   echo "***ERROR***"
-  sleep 60
+  sleep 120
   $s3cmd -c $S3CFGFILE put $file s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
   exitcode=$?
   if [ $exitcode -ne 0 ]
