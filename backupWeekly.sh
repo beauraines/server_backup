@@ -82,7 +82,7 @@ rcCheck $?
 
 BACKUPMODULE='package list'
 echo ".....Backing up package list" >> $BACKUP_DIR/log/backup_$DATES.log
-dpkg --get-selections > $BACKUP_DIR/pkg/packagelist.$(uname -n)
+dpkg --get-selections > $BACKUP_DIR/packagelist.$(uname -n)
 rcCheck $?
 
 echo "done."
