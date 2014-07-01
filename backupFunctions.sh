@@ -127,7 +127,7 @@ echo Finished uploading tarballs.
 
 #copy Package list file to S3
 echo -n Copying package list to S3...
-$s3cmd -c $S3CFGFILE put $BACKUP_DIR/pkg/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd -c $S3CFGFILE put $BACKUP_DIR/packagelist* s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 s3exitCheck $? $BACKUP_DIR/packagelist
 echo done.
 
