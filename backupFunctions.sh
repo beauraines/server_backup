@@ -99,10 +99,13 @@ $s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_D
 echo done.
 
 #copy mysql dumps to S3
-echo -n Copying mysql dumps to S3...
-$s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
-s3exitCheck $?  $BACKUP_DIR/mysql/
-echo done.
+if [ -d $BACKUP_DIR/mysql ]
+then
+        echo -n Copying mysql dumps to S3...
+        $s3cmd -c $S3CFGFILE --recursive put $BACKUP_DIR/mysql s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+        s3exitCheck $?  $BACKUP_DIR/mysql/
+        echo done.
+fi
 
 # find 1028120430/ -maxdepth 1 -type d ! -name mysql ! -name $DATES
 echo -n Creating tar files of backuped up directories...
@@ -111,8 +114,14 @@ tar -czf /tmp/usr.$DATES.tgz $BACKUP_DIR/usr
 tar -czf /tmp/etc.$DATES.tgz $BACKUP_DIR/etc
 tar -czf /tmp/crontabs.$DATES.tgz $BACKUP_DIR/crontabs
 tar -czf /tmp/opt.$DATES.tgz $BACKUP_DIR/opt
-tar -czf /tmp/www.$DATES.tgz $BACKUP_DIR/www
-tar -czf /tmp/repos.$DATES.tgz $BACKUP_DIR/repos
+if [ -d $BACKUP_DIR/www ]
+then
+        tar -czf /tmp/www.$DATES.tgz $BACKUP_DIR/www
+fi
+if [ -d $BACKUP_DIR/repos ]
+then
+        tar -czf /tmp/repos.$DATES.tgz $BACKUP_DIR/repos
+fi
 echo done.
 
 echo Copying tarballs  to S3...
