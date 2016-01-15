@@ -93,10 +93,6 @@ if [ $CopyBackupsS3 -eq 1 ]
 then
 # Copy backups to S3
 echo Copying backups to S3
-# Create dated for directory on S3
-echo Creating S3 backup directory
-$s3cmd -c $S3CFGFILE put $BACKUP_DIR s3://$S3BUCKETNAME/`hostname`/ >> $BACKUP_DIR/log/backup_$DATES.log
-echo done.
 
 #copy mysql dumps to S3
 if [ -d $BACKUP_DIR/mysql ]
@@ -128,7 +124,7 @@ echo Copying tarballs  to S3...
 for tarfile in `ls /tmp/*.$DATES.tgz`
 do
 echo -n Uploading $tarfile ...
-$s3cmd -c $S3CFGFILE put $tarfile s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
+$s3cmd --recursive -c $S3CFGFILE put $tarfile s3://$S3BUCKETNAME/`hostname`/$DATES/ >> $BACKUP_DIR/log/backup_$DATES.log
 s3exitCheck $? $tarfile
 echo done.
 done
