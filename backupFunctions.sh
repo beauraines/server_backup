@@ -84,7 +84,7 @@ deleteOldBackups()
 # Removing old backup files
 #find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -delete
 #find $BACKUP_DIR/datedbackups -maxdepth 1 -type d -ctime +7 -exec rm -rf {} \;
-find $BACKUP_DIR/.. -ctime +14 -exec rm -rf {} \;
+find $BACKUP_DIR/.. -maxdepth 1 -ctime +14 -type d -exec rm -rf {} \;
 }
 
 copyBackupstoS3()
