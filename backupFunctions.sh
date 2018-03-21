@@ -148,3 +148,12 @@ rm /tmp/*$DATES.tgz
 echo done.
 fi
 }
+
+# Zip Backup Before sending logfile
+# Must specify full path to log directory (like what was scheduled with cron)
+# sendBackUpLog /var/log/backupWeekly.log
+sendBackupLog()
+{
+gzip $BACKUP_DIR/log/backup_$DATES.log
+mutt -s "Backup logs for `uname -n`" -a $BACKUP_DIR/log/backup_$DATES.log.gz  -- $BACKUPNOTIFY < $1
+}

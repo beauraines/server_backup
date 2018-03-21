@@ -184,7 +184,4 @@ echo "Backup job completed at `date`" >> $BACKUP_DIR/log/backup_$DATES.log
 
 copyBackupstoS3
 
-# Zip Backup Before sending logfile
-gzip $BACKUP_DIR/log/backup_$DATES.log
-
-mutt -s "Backup logs for `uname -n`" -a $BACKUP_DIR/log/backup_$DATES.log.gz  -- $BACKUPNOTIFY < /var/log/backupWeekly.log
+sendBackupLog /var/log/backupWeekly.log
