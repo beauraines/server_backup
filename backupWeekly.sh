@@ -184,5 +184,5 @@ echo "Backup job completed at `date`" >> $BACKUP_DIR/log/backup_$DATES.log
 
 copyBackupstoS3
 
-mutt -s "Backup logs for `uname -n`" -a $BACKUP_DIR/log/backup_$DATES.log  -- $BACKUPNOTIFY < /var/log/backupWeekly.log
+sendBackupLog /var/log/backupWeekly.log
 
