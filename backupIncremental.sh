@@ -83,11 +83,11 @@ if [ $backupMySQL -eq 1 ]
 then
 echo -n "Backing up mysql databases..."
 echo "Backing up  mysql databases..."  >> $BACKUP_DIR/log/backup_$DATES.log
-for i in `mysql -u$MYSQLROOTUSER -p$MYSQLROOTPASS -BNe 'select  schema_name from information_schema.schemata;'`
+for i in `mysql --defaults-file=$MYSQLOPTIONSFILE -BNe 'select  schema_name from information_schema.schemata;'`
 do 
 	BACKUPMODULE="mysql database schema $i"
         echo "Backing up $BACKUPMODULE"
-	mysqldump -R --add-drop-table -v --opt --lock-all-tables --log-error=$BACKUP_DIR/log/backup_$DATES.log -u $MYSQLROOTUSER -p$MYSQLROOTPASS $i | gzip > $BACKUP_DIR/mysql/$i.dmp.sql.gz
+	mysqldump --defaults-file=$MYSQLOPTIONSFILE -R --add-drop-table -v --opt --lock-all-tables --log-error=$BACKUP_DIR/log/backup_$DATES.log $i | gzip > $BACKUP_DIR/mysql/$i.dmp.sql.gz
 	rcCheck $?
 	sleep 10
 done
