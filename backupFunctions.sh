@@ -150,10 +150,13 @@ fi
 }
 
 # Zip Backup Before sending logfile
-# Must specify full path to log directory (like what was scheduled with cron)
+# Argument 1 Must specify full path to log directory (like what was scheduled with cron)
+# Argument 2 boolean  to actually mail or not
 # sendBackUpLog /var/log/backupWeekly.log
 sendBackupLog()
 {
 gzip $BACKUP_DIR/log/backup_$DATES.log
-mutt -s "Backup logs for `uname -n`" -a $BACKUP_DIR/log/backup_$DATES.log.gz  -- $BACKUPNOTIFY < $1
+if [ $2 = true ]; then
+	mutt -s "Backup logs for `uname -n`" -a $BACKUP_DIR/log/backup_$DATES.log.gz  -- $BACKUPNOTIFY < $1
+fi
 }

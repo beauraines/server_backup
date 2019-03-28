@@ -150,5 +150,4 @@ echo "Backup job completed at `date`" >> $BACKUP_DIR/log/backup_$DATES.log
 
 copyBackupstoS3
 
-sendBackupLog /var/log/backupIncremental.log
-
+sendBackupLog /var/log/backupIncremental.log $SEND_INCREMENTAL_LOGS
